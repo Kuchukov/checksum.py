@@ -41,11 +41,32 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    file.seekp(0xFF00);
-    file.write(reinterpret_cast<char*>(&checksum1), sizeof(checksum1));
+    uint32_t old_checksum1;
+    file.seekg(0xFF00);
+    file.read(reinterpret_cast<char*>(&old_checksum1), sizeof(old_checksum1));
 
-    file.seekp(0x1FF00);
-    file.write(reinterpret_cast<char*>(&checksum2), sizeof(checksum2));
+    uint32_t old_checksum2;
+    file.seekg(0x1FF00);
+    file.read(reinterpret_cast<char*>(&old_checksum2), sizeof(old_checksum2));
+
+    std::cout << "0x0000-0xFEFF: " << old_checksum1 << std::endl;
+    std::cout << "0x10000-0x1FEFF: " << old_checksum2 << std::endl;
+
+    std::string answer;
+    std::cout << "Do you want to recalculate the checksum? (y/n): ";
+    std::getline(std::cin, answer);
+
+    if (answer == "y") {
+        file.seekp(0xFF00);
+        file.write(reinterpret_cast<char*>(&checksum1), sizeof(checksum1));
+
+        file.seekp(0x1FF00);
+        file.write(reinterpret_cast<char*>(&checksum2), sizeof(checksum2));
+
+        std::cout << "Checksums recalculated." << std::endl;
+    } else {
+        std::cout << "Checksums not recalculated." << std::endl;
+    }
 
     file.close();
 

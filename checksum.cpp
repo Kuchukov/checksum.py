@@ -10,28 +10,28 @@ int main(int argc, char* argv[]) {
     }
 
     const std::string filename = argv[1];
-    const uint16_t RANGE_1_START = 0x0000;
-    const uint16_t RANGE_1_END = 0xFEFF;
-    const uint16_t RANGE_2_START = 0x10000;
-    const uint16_t RANGE_2_END = 0x1FEFF;
+    const uint32_t RANGE_1_START = 0x0000;
+    const uint32_t RANGE_1_END = 0xFEFF;
+    const uint32_t RANGE_2_START = 0x10000;
+    const uint32_t RANGE_2_END = 0x1FEFF;
 
-    uint16_t checksum1 = 0;
-    for (uint16_t i = RANGE_1_START; i <= RANGE_1_END; ++i) {
+    uint32_t checksum1 = 0;
+    for (uint32_t i = RANGE_1_START; i <= RANGE_1_END; ++i) {
         std::ifstream file(filename, std::ios::binary);
         file.seekg(i);
         char byte;
         file.get(byte);
-        checksum1 += static_cast<uint16_t>(byte);
+        checksum1 += static_cast<uint32_t>(byte);
         file.close();
     }
 
-    uint16_t checksum2 = 0;
-    for (uint16_t i = RANGE_2_START; i <= RANGE_2_END; ++i) {
+    uint32_t checksum2 = 0;
+    for (uint32_t i = RANGE_2_START; i <= RANGE_2_END; ++i) {
         std::ifstream file(filename, std::ios::binary);
         file.seekg(i);
         char byte;
         file.get(byte);
-        checksum2 += static_cast<uint16_t>(byte);
+        checksum2 += static_cast<uint32_t>(byte);
         file.close();
     }
 

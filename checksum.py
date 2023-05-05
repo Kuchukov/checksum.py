@@ -28,7 +28,7 @@ for start, end in ranges:
         saved_crc = f.read(2)
 
     if saved_crc == byte_str:
-        print("  Текущее значение CRC совпадает с сохраненным значением.")
+        print("  Текущее значение CRC совпадает с сохраненным")
     else:
         current_crc = binascii.hexlify(saved_crc).decode('utf-8')
         print(f"  Текущее значение CRC: {current_crc}")
@@ -37,6 +37,6 @@ for start, end in ranges:
             with open(filename, "r+b") as f:
                 f.seek(0xFF00 if start == 0x0000 else 0x1FF00)
                 f.write(byte_str)
-                print("  Успешно записано новое значение CRC.")
+                print("  Успешно")
         else:
-            print("  Не записано новое значение CRC.")
+            print("  Не записано")

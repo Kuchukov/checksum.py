@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <vector>
 
 std::string calculateCRC(const std::string& filename, size_t start, size_t end) {
     std::ifstream file(filename, std::ios::binary);
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]) {
         if (saved_crc == std::stoul(current_crc, nullptr, 16)) {
             std::cout << "  Текущее значение CRC совпадает с сохраненным" << std::endl;
         } else {
-            std::cout << "  Текущее значение CRC: " << std::hex << std::setw(4) << std::setfill('0')
+            std::cout << "  Текущее значение CRC: 0x" << std::hex << std::setw(4) << std::setfill('0')
                       << saved_crc << std::endl;
             std::cout << "  Записать CRC? (y/n): ";
             std::string answer;
@@ -56,7 +57,7 @@ int main(int argc, char* argv[]) {
             if (answer == "y") {
                 std::ofstream outfile(filename, std::ios::binary | std::ios::in | std::ios::out);
                 outfile.seekp(start == 0x0000 ? 0xFF00 : 0x1FF00);
-                outfile.write(reinterpret_cast<const char*>(&crc), sizeof(crc));
+                outfile.write(reinterpret_cast<const char*>(&saved_crc), sizeof(saved_crc));
                 std::cout << "  Успешно" << std::endl;
             } else {
                 std::cout << "  Не записано" << std::endl;

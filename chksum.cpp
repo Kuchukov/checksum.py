@@ -22,12 +22,6 @@ std::string calculateCRC(const std::string& filename, size_t start, size_t end) 
     return oss.str();
 }
 
-void writeCRC(const std::string& filename, size_t offset, uint16_t crc) {
-    std::ofstream file(filename, std::ios::binary | std::ios::in | std::ios::out);
-    file.seekp(offset);
-    file.write(reinterpret_cast<const char*>(&crc), sizeof(crc));
-}
-
 int main(int argc, char* argv[]) {
     if (argc != 2) {
         std::cout << "Ошибка: укажите файл" << std::endl;

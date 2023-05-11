@@ -1,3 +1,5 @@
+Volvo, M4.4 calculate sum
+
 Python3:
 python3 chksum.py BSR_Stage_3_330hp_460Nm_0261204451_1037357521_P9155763.BIN
 Диапазон: 0x0000-0xFEFF:

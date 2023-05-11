@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
                   << std::hex << std::setw(4) << std::setfill('0') << end << ":" << std::endl;
 
         std::string current_crc = calculateCRC(filename, start, end);
-        std::cout << "  CRC: " << current_crc << std::endl;
+        std::cout << "  Текущая: " << current_crc << std::endl;
 
         std::ifstream file(filename, std::ios::binary);
         file.seekg(start == 0x0000 ? 0xFF00 : 0x1FF00);
@@ -50,11 +50,11 @@ int main(int argc, char* argv[]) {
         uint16_t saved_crc_little_endian = (saved_crc >> 8) | (saved_crc << 8);
 
         if (saved_crc_little_endian == std::stoul(current_crc, nullptr, 16)) {
-            std::cout << "  Текущее значение CRC совпадает с сохраненным" << std::endl;
+            std::cout << "  Контрольная сумма верна." << std::endl;
         } else {
-            std::cout << "  Текущее значение CRC: " << std::hex << std::setw(4) << std::setfill('0')
+            std::cout << "  Сохраненная в файле: " << std::hex << std::setw(4) << std::setfill('0')
                       << std::uppercase << std::noshowbase << saved_crc_little_endian << std::endl;
-            std::cout << "  Записать CRC? (y/n): ";
+            std::cout << "  Исправить? (y/n): ";
             std::string answer;
             std::cin >> answer;
             if (answer == "y" || answer == "Y") {
@@ -66,9 +66,9 @@ int main(int argc, char* argv[]) {
                 file.write(reinterpret_cast<const char*>(&crc_to_write), sizeof(crc_to_write));
                 file.close();
 
-                std::cout << "  Успешно" << std::endl;
+                std::cout << "  Успех" << std::endl;
             } else {
-                std::cout << "  Не записано" << std::endl;
+                std::cout << "  Неудача" << std::endl;
             }
         }
     }

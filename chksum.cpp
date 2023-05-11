@@ -63,12 +63,18 @@ int main(int argc, char* argv[]) {
             std::cout << "  Записать CRC? (y/n): ";
             std::string answer;
             std::cin >> answer;
-            if (answer == "y") {
-                writeCRC(filename, start == 0x0000 ? 0xFF00 : 0x1FF00, saved_crc_little_endian);
-                std::cout << "  Успешно" << std::endl;
+            if (answer == "y" || answer == "Y") {
+                uint16_t crc_to_write = std::stoul(current_crc, nullptr, 16);
+                crc_to_write = (crc_to_write >> 8) | (crc_to_write << 8);
 
-                current_crc = calculateCRC(filename, start, end);
-                std::cout << "  Новое значение CRC: " << current_crc << std::endl;
+                std::ofstream file(filename, std::ios::binary | std::ios::in | std::ios::out);
+                file.seekp(start == 0x0000 ? 0xFF00 : 0x1FF00);
+                file.write(reinterpret_cast<const char*>(&crc_to_write), sizeof(crc_to_write));
+                file.close();
+
+                std::cout << "  Успешно" << std::endl;
+            } else {
+                std::cout << "  Не записано" << std::endl;
             }
         }
     }

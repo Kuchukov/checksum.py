@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <fstream>
 #include <vector>
+#include <sstream>
 
 std::string calculateCRC(const std::string& filename, size_t start, size_t end) {
     std::ifstream file(filename, std::ios::binary);
@@ -17,8 +18,14 @@ std::string calculateCRC(const std::string& filename, size_t start, size_t end) 
     }
 
     std::ostringstream oss;
-    oss << std::hex << std::setw(4) << std::setfill('0') << crc;
+    oss << std::setw(4) << std::setfill('0') << std::nouppercase << std::hex << crc;
     return oss.str();
+}
+
+void writeCRC(const std::string& filename, size_t offset, uint16_t crc) {
+    std::ofstream file(filename, std::ios::binary | std::ios::in | std::ios::out);
+    file.seekp(offset);
+    file.write(reinterpret_cast<const char*>(&crc), sizeof(crc));
 }
 
 int main(int argc, char* argv[]) {
@@ -46,21 +53,22 @@ int main(int argc, char* argv[]) {
         uint16_t saved_crc;
         file.read(reinterpret_cast<char*>(&saved_crc), sizeof(saved_crc));
 
-        if (saved_crc == std::stoul(current_crc, nullptr, 16)) {
+        uint16_t saved_crc_little_endian = (saved_crc >> 8) | (saved_crc << 8);
+
+        if (saved_crc_little_endian == std::stoul(current_crc, nullptr, 16)) {
             std::cout << "  Текущее значение CRC совпадает с сохраненным" << std::endl;
         } else {
-            std::cout << "  Текущее значение CRC: 0x" << std::hex << std::setw(4) << std::setfill('0')
-                      << saved_crc << std::endl;
+            std::cout << "  Текущее значение CRC: " << std::hex << std::setw(4) << std::setfill('0')
+                      << std::uppercase << std::noshowbase << saved_crc_little_endian << std::endl;
             std::cout << "  Записать CRC? (y/n): ";
             std::string answer;
             std::cin >> answer;
             if (answer == "y") {
-                std::ofstream outfile(filename, std::ios::binary | std::ios::in | std::ios::out);
-                outfile.seekp(start == 0x0000 ? 0xFF00 : 0x1FF00);
-                outfile.write(reinterpret_cast<const char*>(&saved_crc), sizeof(saved_crc));
+                writeCRC(filename, start == 0x0000 ? 0xFF00 : 0x1FF00, saved_crc_little_endian);
                 std::cout << "  Успешно" << std::endl;
-            } else {
-                std::cout << "  Не записано" << std::endl;
+
+                current_crc = calculateCRC(filename, start, end);
+                std::cout << "  Новое значение CRC: " << current_crc << std::endl;
             }
         }
     }

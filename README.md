@@ -1,4 +1,4 @@
-Volvo, M4.4 calculate sum
+Volvo, M4.4 "calculate sum" (AI generated)
 
 Python3:
 python3 chksum.py BSR_Stage_3_330hp_460Nm_0261204451_1037357521_P9155763.BIN

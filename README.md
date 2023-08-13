@@ -1,7 +1,7 @@
 Volvo, M4.4 "calculate sum" (AI generated)
 
 Python3:
-python3 chksum.py BSR_Stage_3_330hp_460Nm_0261204451_1037357521_P9155763.BIN
+python3 chksum.py 0261204451_1037357521_P9155763.BIN
 Диапазон: 0x0000-0xFEFF:
   Текущая: 8192
   Сохраненная в файле: 8185
@@ -14,7 +14,7 @@ python3 chksum.py BSR_Stage_3_330hp_460Nm_0261204451_1037357521_P9155763.BIN
 Компиляция под Unix C++:
 g++ -o chksum chksum.cpp
 
-./chksum BSR_Stage_3_330hp_460Nm_0261204451_1037357521_P9155763.BIN 
+./chksum 0261204451_1037357521_P9155763.BIN 
 Диапазон: 0x0000-0xfeff:
   Текущая: 8185
   Контрольная сумма верна.

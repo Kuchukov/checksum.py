@@ -1,4 +1,4 @@
-Volvo, M4.4 "calculate sum" (AI generated)
+Volvo, M4.4.1 "calc sum" (AI generated)
 
 Python3:
 python3 chksum.py 0261204451_1037357521_P9155763.BIN
